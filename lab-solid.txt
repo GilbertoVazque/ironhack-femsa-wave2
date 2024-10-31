@@ -1,0 +1,104 @@
+interface InventoryService {
+  verifyInventory(order);
+}
+
+class InventoryServiceImpl extendes InventoryService {
+      verifyInventory(order) {
+        // Checks inventory levels
+        if (inventory < order.quantity) {
+            throw new Error("Out of stock");
+        }
+    }
+}
+
+interface NotificeService {
+  notifyCustomer(order);
+}
+
+class NotificeServiceImpl implements NotificeService{
+  notifyCustomer(order) {
+        // Sends an email notification to the customer
+      emailService.sendEmail(order.customerEmail, "Your order has been processed.");
+  }
+}
+
+interface PaymentStandar {
+  processStandardPayment(order);
+}
+
+interface PaymentExpress {
+  processExpressPayment(order, priority);
+}
+
+
+class PaymentService implements PaymentStandar, PaymentExpress {
+  processStandardPayment(order) {
+        // Handles standard payment processing
+        if (paymentService.process(order.amount)) {
+            return true;
+        } else {
+            throw new Error("Payment failed");
+        }
+    }
+
+    processExpressPayment(order, priority) {
+        // Handles express payment processing
+        if (expressPaymentService.process(order.amount, priority)) {
+            return true;
+        } else {
+            throw new Error("Express payment failed");
+        }
+    }
+}
+
+interface OrderService {
+  updateOrderStatus(order, status);
+}
+
+class OrderServiceImpl {
+   updateOrderStatus(order, status) {
+        // Updates the order status in the database
+        database.updateOrderStatus(order.id, status);
+    }
+}
+
+class SystemManager {
+
+  InventoryService inventoryService;
+  NotificeService notificationService;
+  PaymentService paymentService;
+  OrderService orderService;
+
+  SystemManager(InventoryService inventoryService,
+    NotificeService notificationService,
+    PaymentService paymentService,
+    OrderService orderService
+    ) {
+    this.inventoryService = inventoryService;
+    this.notificationService = notificationService;
+    this.paymentService = paymentService;
+    this.orderService = orderService;
+  }
+
+    processOrder(order) {
+        if (order.type == "standard") {
+            inventoryService.verifyInventory(order);
+            PaymentService.processStandardPayment(order);
+        } else if (order.type == "express") {
+            inventoryService.verifyInventory(order);
+            PaymentService.processExpressPayment(order, "highPriority");
+        }
+        orderService.updateOrderStatus(order, "processed");
+        notificationService.notifyCustomer(order);
+    }
+
+}
+
+INFRACCIONES DETECTADAS:
+- SRP: toda la logica esta en la clase SystemManager.
+- OCP: Actualmente, la forma en que se gestionan los diferentes tipos de órdenes (standard y express) hace que la clase SystemManager sea difícil de extender sin modificar el código existente.
+
+MEJORAS: 
+- Implemente SRP al mover logica de inventarios, notificaciones, pagos en distintas clases permitiendo hacer mas modular el sistema.
+- Implemente OCP ya que si necesito modificar la logica de Inventario o pago no requiero modificar la clase principal.
+- Implemente DIP al generar interfaces de inventarios, notificaciones, pagos y al usar interfaces no dependo de clases concretas si no de abtracciones.
