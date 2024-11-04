@@ -1,0 +1,71 @@
+Escenario 1:
+
+TEST testUserAuthentication_ShouldPassWithValidEmailAndPassword
+  WHEN(authenticate(anyString(), anyString())).thenReturn("Should succeed with correct credentials");
+  ASSERT_TRUE(authenticate("validUser", "validPass"), "Should succeed with correct credentials")
+END TEST
+
+TEST testUserAuthentication_ShouldPassWithInvalidValidEmailAndPassword
+  WHEN(authenticate(anyString(), anyString())).thenThrow(new Exception("Should fail with wrong credentials"));
+  ASSERT_FALSE(authenticate("validUser", "wrongPass"), "Should fail with wrong credentials")
+END TEST
+
+Problemas encontrados:
+- Todas las validaciones se hacen en un solo test.
+- El nombre del test no es descriptivo.
+
+Mejoras: 
+- se dividio en 2 test, cada uno evaluando si pasa la autenticacion o no.
+- se agregó un nombre mas descriptivo a cada test.
+- Se agregó el uso de un mock para simular el servicio de authenticate.
+
+
+Escenario 2:
+
+TEST testDataProcessing_ShouldSuccess
+  WHEN(fetchData()).thenReturn( "Data should be processed successfully");
+
+  DATA data = fetchData()
+  processData(data)
+  ASSERT_TRUE(data.processedSuccessfully, "Data should be processed successfully")
+END TEST
+
+TEST testDataProcessing_ShouldError
+  WHEN(fetchData()).thenThrow(new Exception("Should handle processing errors"));
+  DATA data = fetchData()
+    ASSERT_EQUALS("Data processing error", error.message, "Should handle processing errors")
+END TEST
+
+Problemas encontrados:
+- Todas las validaciones se hacen en un solo test.
+- El nombre del test no es descriptivo
+
+Mejoras:
+
+- se dividio en 2 test, cada uno evaluando si se procesa correctamente los datos.
+- se agregó un nombre mas descriptivo a cada test.
+- Se agregó el uso de un mock para simular el servicio de fetchData.
+
+
+Escenario 3:
+
+TEST testUIResponsiveness_ShouldPixelsInvalid
+  UI_COMPONENT uiComponent = setupUIComponent(1024)
+  ASSERT_TRUE(uiComponent.adjustsToScreenSize(1024), "UI should adjust to width of 1024 pixels")
+END TEST
+
+Problemas encontrados:
+- El nombre del test no es descriptivo.
+
+Mejoras:
+- se agregó un nombre mas descriptivo al test.
+
+
+
+
+
+
+
+
+
+
