@@ -1,0 +1,64 @@
+Escenario 1:
+
+FUNCTION sanitize(variable):
+  return variable-sanitizada
+
+FUNCTION limitAuthenticate():
+  return validateLimit
+
+FUNCTION calculateHash(password):
+  return hashPassword
+
+FUNCTION authenticateUser(username, password):
+  sanitize(username)
+  sanitize(password)
+  limitAuthenticate()
+  query database find username
+  if found 
+    if calculateHash(password) == user.passwordHash
+      return true
+    else return false
+    
+
+  Vuelnerabilidades encontradas:
+  - actualmente se esta comparando la contraseña en bruto sin cifrar.
+  - al concatenar datos sin sinatizar existe un riego de inyeccion SQL.
+  - no tiene un limite de intentos de auntenticacion y esta expuesto a un ataque de fuerza bruta.
+
+  Mejoras:
+  - se creó la funcion sanitize que sanitiza los campos que recibe el sistema.
+  - se creó la funcion limitAuthenticate que valida el limite de autenticaciones permitidas.
+  - se creó la funcion calculateHash que generá un hash con el password que recibe el sistema.
+  - se hace uso de los metodos en authenticateUser para prevenir ataques.
+
+
+Escenario 2:
+
+DEFINE FUNCTION generateJWT(userCredentials):
+  IF validateCredentials(userCredentials):
+    SET payload = {
+      "sub": userCredentials.userId,  
+      "iat": currentTime,             
+      "exp": currentTime + 3600      
+    }
+    SET token = encodeJWT(payload, secretKey)  
+    RETURN token
+  ELSE:
+    RETURN "Authentication error"
+
+  Mejoras:
+  - se hace uso de un payload para manejar el subject, fecha de creacion y fecha de expiracion del token.
+  - se hace uso de un escenario en el que la autenticacion falla.
+
+Escenario 3:
+
+PLAN secureDataCommunication:
+  IMPLEMENT SSL/TLS version >= TLS 1.2 for all data in transit
+  USE encrypted storage solutions for data at rest
+  ENSURE all data exchanges comply with HTTPS protocols
+
+  Vulnerabilidades encontradas:
+  - no se especifica la version de SSL o TLS
+
+  Mejoras:
+  - Uso de una version de TLS mayor o igual de 1.2 que es una version mas segura.
