@@ -1,0 +1,44 @@
+CREATE INDEX idx_orderdetails_quantity ON OrderDetails (Quantity);
+CREATE INDEX idx_orderdetails_orderid ON OrderDetails (OrderID);
+CREATE INDEX idx_orders_orderid ON Orders (OrderID);
+
+WITH filterOrderDetails as (
+    SELECT OrderId, Quantity, UnitPrice
+    FROM OrderDetails 
+    WHERE Quantity > 10
+)
+SELECT Orders.OrderID, SUM(filterOrderDetails.Quantity * filterOrderDetails.UnitPrice) AS TotalPrice
+FROM Orders
+JOIN FilteredOrderDetails ON Orders.OrderID = FilteredOrderDetails.OrderID
+GROUP BY Orders.OrderID;
+
+Mejoras:
+- se requiere agregar un indice a la columna Quantity y OrderID ya que se usan para filtrar y agrupar para obtimizar la consulta.
+- Uso de CTE para crear una tabla temporal con Quantity > 10 y evitar usar todas las filas.
+
+
+CREATE INDEX idx_customers_city ON Customers (City);
+CREATE INDEX idx_customers_customername ON Customers (CustomerName);
+
+SELECT CustomerName FROM Customers WHERE City = 'London' ORDER BY CustomerName;
+
+Mejoras:
+- se requiere agregar un indice a la columna City y CustomerName ya que se usan para filtrar y agrupar para obtimizar la consulta.
+
+
+db.posts
+  .find({ status: "active" }, { title: 1, likes: 1 })
+  .sort({ likes: -1 });
+
+Mejoras:
+- se requiere agregar un indice a la columna status, title y likes para obtimizar la consulta.
+
+
+db.users.aggregate([
+  { $match: { status: "active" } },
+  { $group: { _id: "$location", totalUsers: { $sum: 1 } } },
+]);
+
+Mejoras:
+- se requiere agregar un indice a la columna status para obtimizar la consulta.
+
