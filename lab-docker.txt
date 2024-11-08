@@ -1,0 +1,35 @@
+Etapa de construcción:
+
+Beneficios:
+- Al usar docker nos aseguramos que asi como funciona en nuestro local funcionariá en los demas ambientes.
+- Nos permite detallar los pasos de creacion del proyecto asegurandonos la integridad de la aplicacion.
+- Nos permite levantar un contenedor de toda la aplicacion en segundos con una imagen de nuestra app.
+- Nos permite incluir dependencias especificas eliminando la incompatibilidad y problemas de versiones.
+
+desafios:
+- Se debe conocer solidos conocimientos en la creacion de capas para dar mantenimiento.
+
+Etapa de prueba:
+- Nos permite levantar contenedores de nuestra app en segundos para realizar pruebas automatizadas en el CI-CD.
+- Nos permite levantar una copia de nuestra app en nuetro local para hacer pruebas.
+
+Desafios:
+- Se requiere una buena administracion de contenedores cuando se hacen pruebas y hay mas de un servicio conectado como microservicios y bases de datos.
+
+Etapa de implementacion
+- Nos permite desplegar cambios en produccion de manera rapida y segura.
+- Nos permite garantizar que se ejecuta la misma version que se probó en ambientes de QA.
+- Nos permite regresar a una version segura en caso de que algo falle en el despliegue.
+- Nos permite escalar de manera rapida al lanzar nuevos contenedores.
+
+Desafios:
+- Se requiere un alto conocimiento en orquestacion de contenedores y redes cuando son muchos contenedores.
+- Se requiere un monitoreo constante.
+
+
+
+resumen :
+Usar docker en CI-CD trae muchos Beneficios pero tambien retos, permite replicar una aplicacion en cualquier ambiente de manera rapida y segura,
+ Durante la construcción, garantiza un entorno estándar y compatible, aunque requiere optimizar imágenes y gestionar dependencias. 
+ En la etapa de pruebas, facilita ambientes idénticos a producción y aisla cada prueba, aunque puede haber desafíos de persistencia de datos y orquestación. 
+ En implementación, Docker permite un despliegue ágil y rollback sencillo, pero requiere herramientas avanzadas para monitoreo y administración de datos persistentes en producción.
