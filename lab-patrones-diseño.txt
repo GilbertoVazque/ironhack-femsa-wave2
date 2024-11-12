@@ -1,0 +1,118 @@
+Gestión de Configuración Global
+
+Solución propuesta: Patrón Singleton
+
+class ConfiguracionGlobal {
+    private static ConfiguracionGlobal instancia;
+
+    private ConfiguracionGlobal() {}
+
+    public static synchronized ConfiguracionGlobal getInstancia() {
+        if (instancia == null) {
+            instancia = new ConfiguracionGlobal();
+        }
+        return instancia;
+    }
+}
+
+Justificación:
+El patrón Singleton permite que solo haya una instancia del objeto de configuración en toda la aplicación, evitando conflictos de acceso. synchronized garantiza la seguridad en entornos multithreading.
+
+Creación Dinámica de Objetos Basada en la Entrada del Usuario
+
+Solución propuesta: Patrón Factory Method
+
+interface ElementoUI {
+    void render();
+}
+
+class Boton implements ElementoUI {
+    public void render() { }
+}
+
+class CuadroTexto implements ElementoUI {
+    public void render() {}
+}
+
+
+class UIFactory {
+    public ElementoUI crearElemento(String tipo) {
+        switch(tipo) {
+            case "boton":
+                return new Boton();
+            case "cuadroTexto":
+                return new CuadroTexto();
+            default:
+                throw new IllegalArgumentException("Tipo no soportado");
+        }
+    }
+}
+
+UIFactory factory = new UIFactory();
+ElementoUI elemento = factory.crearElemento(entradaUsuario);
+elemento.render();
+
+Justificación:
+El patrón Factory Method permite crear objetos de diferentes tipos de elementos de UI sin conocer sus clases específicas de antemano. Esto facilita la extensión de nuevos tipos de elementos sin modificar el código base.
+
+Notificación de Cambio de Estado en Componentes del Sistema
+
+Solución propuesta: Patrón Observer
+
+interface Observador {
+    void actualizar(String mensaje);
+}
+
+class Sujeto {
+    private List<Observador> observadores = new ArrayList<>();
+
+    public void agregarObservador(Observador observador) {
+        observadores.add(observador);
+    }
+
+    public void notificarObservadores(String mensaje) {
+        for (Observador observador : observadores) {
+            observador.actualizar(mensaje);
+        }
+    }
+
+    public void cambiarEstado(String nuevoEstado) {
+        notificarObservadores("El estado ha cambiado a: " + nuevoEstado);
+    }
+}
+
+
+class Componente1 implements Observador {
+    public void actualizar(String mensaje) { }
+}
+class Componente2 implements Observador {
+    public void actualizar(String mensaje) {  }
+}
+
+Justificación:
+El patrón Observer permite a los componentes ser notificados de cambios en otros sin acoplamiento estrecho. Es útil en sistemas donde se necesitan actualizaciones en tiempo real entre partes del sistema.
+
+Desafío 4: Gestión Eficiente de Operaciones Asincrónicas
+
+Solución propuesta: Patrón Asincrono
+
+class GestorAsync {
+
+    public Future<String> ejecutarOperacionAsincrona() {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return "Resultado";
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+}
+
+GestorAsync gestor = new GestorAsync();
+Future<String> resultadoFuture = gestor.ejecutarOperacionAsincrona();
+
+String resultado = resultadoFuture.get();
+
+Justificación:
+El uso de CompletableFuture permite que las operaciones asincrónicas se ejecuten en segundo plano. El flujo principal no se bloquea, y el resultado se puede recuperar cuando la operación finaliza.
