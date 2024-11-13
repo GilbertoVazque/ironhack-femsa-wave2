@@ -1,0 +1,247 @@
+openapi: 3.0.1
+info:
+  title: API de Usuarios y Órdenes
+  description: Documentación para los endpoints de Users y Orders.
+  version: "1.0.0"
+servers:
+  - url: /api/v1
+
+paths:
+  /users:
+    get:
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Consulta exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notifications:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "200"
+                      message:
+                        type: string
+                        example: "Consulta exitosa"
+                      timestamp:
+                        type: string
+                        format: date-time
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '404':
+          description: Usuarios no encontrados
+        '500':
+          description: Error interno del servidor
+
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+        '400':
+          description: Datos inválidos
+        '500':
+          description: Error interno del servidor
+
+  /users/{id}:
+    get:
+      summary: Obtener usuario por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del usuario
+      responses:
+        '200':
+          description: Consulta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+    put:
+      summary: Actualizar usuario por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+        '400':
+          description: Datos inválidos
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /orders:
+    get:
+      summary: Obtener todas las órdenes
+      responses:
+        '200':
+          description: Consulta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '404':
+          description: Órdenes no encontradas
+        '500':
+          description: Error interno del servidor
+
+    post:
+      summary: Crear una nueva orden
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Orden creada exitosamente
+        '400':
+          description: Datos inválidos
+        '500':
+          description: Error interno del servidor
+
+  /orders/{id}:
+    get:
+      summary: Obtener orden por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID de la orden
+      responses:
+        '200':
+          description: Consulta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '404':
+          description: Orden no encontrada
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Juan"
+        lastName:
+          type: string
+          example: "Perez"
+        email:
+          type: string
+          example: "juan.perez@mail.com"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-05-24T19:43:21.886Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-05-24T19:43:21.886Z"
+
+    UserResponse:
+      type: object
+      properties:
+        notifications:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "200"
+            message:
+              type: string
+              example: "Consulta exitosa"
+            timestamp:
+              type: string
+              format: date-time
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        itemName:
+          type: string
+          example: "Producto A"
+        quantity:
+          type: integer
+          example: 3
+        price:
+          type: number
+          format: float
+          example: 99.99
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-05-24T19:43:21.886Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-05-24T19:43:21.886Z"
+
+    OrderResponse:
+      type: object
+      properties:
+        notifications:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "200"
+            message:
+              type: string
+              example: "Consulta exitosa"
+            timestamp:
+              type: string
+              format: date-time
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
