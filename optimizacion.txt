@@ -1,0 +1,41 @@
+Fragmento 1:
+
+function updateList(items) {
+  const list = document.getElementById("itemList");
+  list.innerHTML = "";
+
+  const fragment = document.createDocumentFragment();
+  items.forEach(item => {
+    const listItem = document.createElement("li");
+    listItem.textContent = item;
+    fragment.appendChild(listItem);
+  });
+  list.appendChild(fragment);
+}
+
+Mejoras:
+- Se usa DocumentFragment, que permite construir los elementos en memoria y aplicar una sola operación DOM para insertar todos los elementos.
+- Uso de forEach mejora el rendimiento y legibilidad del codigo.
+
+Fragmento 2:
+
+public class ProductLoader {
+    public List<Product> loadProducts() {
+
+        return database.getProductsByIds(IntStream.rangeClosed(1, 100)
+                            .boxed()
+                            .collect(Collectors.toList()));
+    }
+}
+
+Mejoras:
+- Se usa una consulta en lote (getProductsByIds) para recuperar todos los productos en una sola llamada. Esto reduce significativamente el tiempo de respuesta y la carga en la base de datos.
+
+Fragmento 3:
+
+public List<int> ProcessData(List<int> data) {
+    return data.Select(d => d * (d % 2 == 0 ? 2 : 3)).ToList();
+}
+
+Mejoras:
+- Se usa LINQ con Select para aplicar una transformación más declarativa y eficiente. Este enfoque mejora la legibilidad y reduce el código boilerplate.
